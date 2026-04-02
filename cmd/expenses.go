@@ -141,8 +141,8 @@ var expensesCreateCmd = &cobra.Command{
 
 		if split == "" || split == "even" {
 			p.SplitEqually = true
-		} else if split == "exact" {
-			// For exact split with paid-by, we need to build shares.
+		} else if strings.HasPrefix(split, "exact:") {
+			// Custom exact split: "exact:Name:Amount,Name:Amount"
 			me, err := client.GetCurrentUser()
 			if err != nil {
 				output.Die("failed to get current user: %v", err)
@@ -150,7 +150,6 @@ var expensesCreateCmd = &cobra.Command{
 
 			var payerID int64
 			if paidBy != "" {
-				// Resolve payer from group members.
 				found := false
 				lower := strings.ToLower(paidBy)
 				for _, m := range group.Members {
@@ -168,30 +167,57 @@ var expensesCreateCmd = &cobra.Command{
 				payerID = me.ID
 			}
 
-			// Even split among all members, payer pays full.
-			memberCount := len(group.Members)
-			if memberCount == 0 {
-				output.Die("group has no members")
+			// Parse "exact:Name:Amount,Name:Amount"
+			pairs := strings.Split(split[6:], ",") // skip "exact:"
+			owedMap := make(map[string]string) // lowercase name -> amount
+			var owedTotal float64
+			for _, pair := range pairs {
+				parts := strings.SplitN(pair, ":", 2)
+				if len(parts) != 2 {
+					output.Die("invalid split format: %s (expected Name:Amount)", pair)
+				}
+				name := strings.TrimSpace(parts[0])
+				amount := strings.TrimSpace(parts[1])
+				amtFloat, err := strconv.ParseFloat(amount, 64)
+				if err != nil {
+					output.Die("invalid amount for %s: %s", name, amount)
+				}
+				owedMap[strings.ToLower(name)] = fmt.Sprintf("%.2f", amtFloat)
+				owedTotal += amtFloat
 			}
 
+			// Validate total
 			costFloat, err := strconv.ParseFloat(cost, 64)
 			if err != nil {
 				output.Die("invalid cost: %s", cost)
 			}
-			share := costFloat / float64(memberCount)
+			if fmt.Sprintf("%.2f", owedTotal) != fmt.Sprintf("%.2f", costFloat) {
+				output.Die("split amounts (%.2f) don't add up to total (%.2f)", owedTotal, costFloat)
+			}
 
+			// Build shares for each group member
 			for _, m := range group.Members {
 				paid := "0.00"
 				if m.ID == payerID {
 					paid = cost
 				}
+				owed := "0.00"
+				lowerFirst := strings.ToLower(m.FirstName)
+				lowerFull := strings.ToLower(m.FirstName + " " + m.LastName)
+				if amt, ok := owedMap[lowerFirst]; ok {
+					owed = amt
+				} else if amt, ok := owedMap[lowerFull]; ok {
+					owed = amt
+				}
 				p.Shares = append(p.Shares, api.ShareParam{
 					UserID:    m.ID,
 					PaidShare: paid,
-					OwedShare: fmt.Sprintf("%.2f", share),
+					OwedShare: owed,
 				})
 			}
 			p.SplitEqually = false
+		} else if split == "exact" {
+			output.Die("exact split requires amounts — use format: exact:Name:Amount,Name:Amount")
 		}
 
 		expense, err := client.CreateExpense(p)
@@ -248,7 +274,7 @@ func init() {
 	expensesListCmd.Flags().String("before", "", "Only expenses before this date (YYYY-MM-DD)")
 
 	expensesCreateCmd.Flags().StringP("group", "g", "", "Group to add expense to")
-	expensesCreateCmd.Flags().String("split", "even", "Split type: even or exact")
+	expensesCreateCmd.Flags().String("split", "even", `Split type: even, or exact:Name:Amount,Name:Amount (e.g. "exact:Barron:60,Nina:40")`)
 	expensesCreateCmd.Flags().String("paid-by", "", "Who paid (name, defaults to you)")
 	expensesCreateCmd.Flags().StringP("currency", "c", "", "Currency code (e.g. USD)")
 
