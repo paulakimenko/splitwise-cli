@@ -1,5 +1,6 @@
 ---
 name: splitwise
+license: MIT
 description: Manage shared expenses via the Splitwise CLI. Use when asked to log, split, or track expenses with other people, check balances, see who owes whom, settle debts, or list recent charges. Triggers on mentions of Splitwise, shared expenses, splitting costs, "log this expense," "who owes what," roommate/partner bills, or any expense-tracking request. Also use when proactively logging bills discovered during email scans or subscription analysis. Even casual mentions like "split this with Nina" or "add the internet bill" should trigger this skill.
 ---
 
@@ -41,8 +42,15 @@ splitwise expenses list --group "Rome" --limit 5
 # Even split, you (Barron) paid — most common case
 splitwise expenses create "Xfinity Internet - March" 51.30
 
+# Custom exact split (60/40, 70/30, any ratio)
+splitwise expenses create "PG&E - March 2026" 254.80 --split "exact:Barron:152.88,Nina:101.92"
+splitwise expenses create "Rent - April" 9300 --split "exact:Barron:7300,Nina:2000"
+
 # Nina paid
 splitwise expenses create "Groceries" 87.50 --paid-by "Nina"
+
+# Nina paid with custom split
+splitwise expenses create "Dinner" 120.00 --paid-by "Nina" --split "exact:Barron:80,Nina:40"
 
 # Different group
 splitwise expenses create "Dinner" 120.00 --group "Rome"
@@ -98,4 +106,5 @@ Run multiple `splitwise expenses create` commands in sequence. No special syntax
 - Default group (Dolores) means `--group` is optional for Barron & Nina expenses
 - Amounts are USD by default (configurable via `splitwise config set default_currency`)
 - `--split even` is the default — expense split equally among all group members
+- `--split "exact:Name:Amount,Name:Amount"` — custom per-person split (amounts must sum to total)
 - The `--paid-by` flag defaults to the authenticated user (Barron)
