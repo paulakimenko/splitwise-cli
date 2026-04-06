@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/barronlroth/splitwise-cli/internal/auth"
-	"github.com/barronlroth/splitwise-cli/internal/output"
+	"github.com/example/splitwise-cli/internal/auth"
+	"github.com/example/splitwise-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 

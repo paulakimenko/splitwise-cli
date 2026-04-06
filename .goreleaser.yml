@@ -20,7 +20,7 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/barronlroth/splitwise-cli/cmd.version={{.Version}}
+      - -s -w -X github.com/example/splitwise-cli/cmd.version={{.Version}}
 
 archives:
   - id: default
@@ -45,11 +45,11 @@ changelog:
 brews:
   - name: splitwise
     repository:
-      owner: barronlroth
+      owner: example
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     directory: Formula
-    homepage: "https://github.com/barronlroth/splitwise-cli"
+    homepage: "https://github.com/example/splitwise-cli"
     description: "A command-line interface for Splitwise"
     license: "MIT"
     install: |
@@ -59,5 +59,5 @@ brews:
 
 release:
   github:
-    owner: barronlroth
+    owner: example
     name: splitwise-cli

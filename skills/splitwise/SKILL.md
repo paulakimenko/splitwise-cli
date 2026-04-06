@@ -1,7 +1,16 @@
 ---
 name: splitwise
-license: MIT
-description: Manage shared expenses via the Splitwise CLI. Use when asked to log, split, or track expenses with other people, check balances, see who owes whom, settle debts, or list recent charges. Triggers on mentions of Splitwise, shared expenses, splitting costs, "log this expense," "who owes what," roommate/partner bills, or any expense-tracking request. Also use when proactively logging bills discovered during email scans or subscription analysis. Even casual mentions like "split this with Nina" or "add the internet bill" should trigger this skill.
+description: Manage shared expenses via the Splitwise CLI. Use when asked to log, split, or track expenses with other people, check balances, see who owes whom, settle debts, or list recent charges. Triggers on mentions of Splitwise, shared expenses, splitting costs, "log this expense," "who owes what," roommate/partner bills, or any expense-tracking request. Even casual mentions like "split this with a roommate" or "add the internet bill" should trigger this skill.
+version: 1.0.1
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - splitwise
+      config:
+        - ~/.config/splitwise-cli/auth.json
+        - ~/.config/splitwise-cli/config.json
+    homepage: https://github.com/example/splitwise-cli
 ---
 
 # Splitwise CLI Skill
@@ -10,19 +19,19 @@ Manage shared expenses, balances, and settlements through the `splitwise` CLI.
 
 ## Setup
 
-The CLI is installed at `~/.local/bin/splitwise` and authenticated via OAuth 2.0. Token is at `~/.config/splitwise-cli/auth.json`. If auth expires, the CLI will tell you — run `splitwise auth` to re-authenticate (requires browser OAuth flow).
+This skill requires the `splitwise` CLI to be installed and available on `PATH`. It uses OAuth 2.0 credentials stored at `~/.config/splitwise-cli/auth.json`. If auth expires, the CLI will tell you — run `splitwise auth` to re-authenticate (requires browser OAuth flow).
 
-The default group is configured as **Dolores** (Barron + Nina's shared expenses group). You don't need to pass `--group` for their shared expenses.
+If a default group is already configured locally, you can omit `--group`. Otherwise, pass `--group` explicitly.
 
 ## Quick Reference
 
 ### Check balances
 ```bash
-# Default group (Dolores) balances
+# Default group balances
 splitwise balances
 
 # Specific group
-splitwise balances --group "Aspen 23"
+splitwise balances --group "Trip"
 ```
 
 ### List expenses
@@ -34,38 +43,38 @@ splitwise expenses list --limit 10
 splitwise expenses list --after 2026-03-01 --before 2026-03-31
 
 # Different group
-splitwise expenses list --group "Rome" --limit 5
+splitwise expenses list --group "Trip" --limit 5
 ```
 
 ### Create an expense
 ```bash
-# Even split, you (Barron) paid — most common case
-splitwise expenses create "Xfinity Internet - March" 51.30
+# Even split, you paid
+splitwise expenses create "Internet - March" 51.30
 
 # Custom exact split (60/40, 70/30, any ratio)
-splitwise expenses create "PG&E - March 2026" 254.80 --split "exact:Barron:152.88,Nina:101.92"
-splitwise expenses create "Rent - April" 9300 --split "exact:Barron:7300,Nina:2000"
+splitwise expenses create "Utilities - March 2026" 254.80 --split "exact:MemberA:152.88,MemberB:101.92"
+splitwise expenses create "Rent - April" 9300 --split "exact:MemberA:7300,MemberB:2000"
 
-# Nina paid
-splitwise expenses create "Groceries" 87.50 --paid-by "Nina"
+# Another member paid
+splitwise expenses create "Groceries" 87.50 --paid-by "MemberB"
 
-# Nina paid with custom split
-splitwise expenses create "Dinner" 120.00 --paid-by "Nina" --split "exact:Barron:80,Nina:40"
+# Another member paid with custom split
+splitwise expenses create "Dinner" 120.00 --paid-by "MemberB" --split "exact:MemberA:80,MemberB:40"
 
 # Different group
-splitwise expenses create "Dinner" 120.00 --group "Rome"
+splitwise expenses create "Dinner" 120.00 --group "Trip"
 
 # Different currency
-splitwise expenses create "Dinner in Lisbon" 45.00 --group "Rome" --currency EUR
+splitwise expenses create "Dinner on Trip" 45.00 --group "Trip" --currency EUR
 ```
 
 ### Other commands
 ```bash
 splitwise me                          # Current user info
 splitwise groups                      # List all groups
-splitwise group "Dolores"             # Group details + member balances
+splitwise group "Household"           # Group details + member balances
 splitwise friends                     # List friends
-splitwise settle "Nina"               # Record a settlement
+splitwise settle "MemberB"            # Record a settlement
 splitwise expenses delete 12345       # Delete an expense by ID
 ```
 
@@ -81,7 +90,7 @@ Every command supports:
 ### Log a recurring shared bill
 Include the month in the description to avoid confusion:
 ```bash
-splitwise expenses create "Xfinity Internet - March 2026" 51.30
+splitwise expenses create "Internet - March 2026" 51.30
 ```
 
 ### Check before logging (avoid duplicates)
@@ -103,8 +112,8 @@ Run multiple `splitwise expenses create` commands in sequence. No special syntax
 ## Key Details
 
 - Group/friend names use case-insensitive partial matching
-- Default group (Dolores) means `--group` is optional for Barron & Nina expenses
+- A configured default group means `--group` is optional
 - Amounts are USD by default (configurable via `splitwise config set default_currency`)
 - `--split even` is the default — expense split equally among all group members
 - `--split "exact:Name:Amount,Name:Amount"` — custom per-person split (amounts must sum to total)
-- The `--paid-by` flag defaults to the authenticated user (Barron)
+- The `--paid-by` flag defaults to the authenticated user

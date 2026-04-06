@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/barronlroth/splitwise-cli/internal/api"
-	"github.com/barronlroth/splitwise-cli/internal/config"
-	"github.com/barronlroth/splitwise-cli/internal/output"
+	"github.com/example/splitwise-cli/internal/api"
+	"github.com/example/splitwise-cli/internal/config"
+	"github.com/example/splitwise-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 
@@ -274,7 +274,7 @@ func init() {
 	expensesListCmd.Flags().String("before", "", "Only expenses before this date (YYYY-MM-DD)")
 
 	expensesCreateCmd.Flags().StringP("group", "g", "", "Group to add expense to")
-	expensesCreateCmd.Flags().String("split", "even", `Split type: even, or exact:Name:Amount,Name:Amount (e.g. "exact:Barron:60,Nina:40")`)
+	expensesCreateCmd.Flags().String("split", "even", `Split type: even, or exact:Name:Amount,Name:Amount (e.g. "exact:MemberA:60,MemberB:40")`)
 	expensesCreateCmd.Flags().String("paid-by", "", "Who paid (name, defaults to you)")
 	expensesCreateCmd.Flags().StringP("currency", "c", "", "Currency code (e.g. USD)")
 

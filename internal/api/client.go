@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/barronlroth/splitwise-cli/internal/auth"
+	"github.com/example/splitwise-cli/internal/auth"
 )
 
 const baseURL = "https://secure.splitwise.com/api/v3.0"

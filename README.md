@@ -5,15 +5,17 @@ A fast CLI for [Splitwise](https://www.splitwise.com). Manage groups, expenses, 
 ## Install
 
 ```bash
-brew tap barronlroth/tap
+brew tap example/tap
 brew install splitwise
 ```
 
 Or with Go:
 
 ```bash
-go install github.com/barronlroth/splitwise-cli@latest
+go install github.com/example/splitwise-cli@latest
 ```
+
+The repository owner values above are placeholders and should be updated to match your own distribution endpoints.
 
 ## Setup
 
@@ -37,26 +39,26 @@ splitwise me
 
 # Groups & balances
 splitwise groups
-splitwise group "Apartment"
+splitwise group "Household"
 
 # Expenses
-splitwise expenses list --group "Apartment" --limit 20
+splitwise expenses list --group "Household" --limit 20
 splitwise expenses list --after 2025-01-01
-splitwise expenses create "Dinner" 85.50 --group "Apartment"
+splitwise expenses create "Dinner" 85.50 --group "Household"
 splitwise expenses delete 123456
 
 # Balances
 splitwise balances
-splitwise balances --group "Apartment"
+splitwise balances --group "Household"
 
 # Friends
 splitwise friends
 
 # Settle up
-splitwise settle "Nina" --group "Apartment"
+splitwise settle "MemberB" --group "Household"
 
 # Set defaults
-splitwise config set default_group "Apartment"
+splitwise config set default_group "Household"
 splitwise config set default_currency USD
 splitwise config show
 ```
