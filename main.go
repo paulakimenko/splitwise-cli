@@ -1,6 +1,6 @@
 package main
 
-import "github.com/example/splitwise-cli/cmd"
+import "github.com/paulakimenko/splitwise-cli/cmd"
 
 func main() {
 	cmd.Execute()

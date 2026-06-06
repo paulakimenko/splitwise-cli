@@ -1,4 +1,4 @@
-module github.com/example/splitwise-cli
+module github.com/paulakimenko/splitwise-cli
 
 go 1.22
 

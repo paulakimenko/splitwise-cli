@@ -1,9 +1,9 @@
 # This is a template. GoReleaser generates the real formula automatically.
-# It's published to github.com/example/homebrew-tap/Formula/splitwise.rb
+# It's published to github.com/paulakimenko/homebrew-tap/Formula/splitwise.rb
 
 class Splitwise < Formula
   desc "A command-line interface for Splitwise"
-  homepage "https://github.com/example/splitwise-cli"
+  homepage "https://github.com/paulakimenko/splitwise-cli"
   license "MIT"
 
   # GoReleaser fills in the URL, sha256, and version automatically.
@@ -11,17 +11,17 @@ class Splitwise < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/example/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_darwin_arm64.tar.gz"
+      url "https://github.com/paulakimenko/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_darwin_arm64.tar.gz"
     else
-      url "https://github.com/example/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_darwin_amd64.tar.gz"
+      url "https://github.com/paulakimenko/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_darwin_amd64.tar.gz"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/example/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_linux_arm64.tar.gz"
+      url "https://github.com/paulakimenko/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_linux_arm64.tar.gz"
     else
-      url "https://github.com/example/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_linux_amd64.tar.gz"
+      url "https://github.com/paulakimenko/splitwise-cli/releases/download/v#{version}/splitwise_#{version}_linux_amd64.tar.gz"
     end
   end
 

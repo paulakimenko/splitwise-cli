@@ -12,7 +12,7 @@ brew install splitwise
 Or with Go:
 
 ```bash
-go install github.com/example/splitwise-cli@latest
+go install github.com/paulakimenko/splitwise-cli@latest
 ```
 
 The repository owner values above are placeholders and should be updated to match your own distribution endpoints.

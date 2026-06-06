@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/example/splitwise-cli/internal/api"
-	"github.com/example/splitwise-cli/internal/output"
+	"github.com/paulakimenko/splitwise-cli/internal/api"
+	"github.com/paulakimenko/splitwise-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 

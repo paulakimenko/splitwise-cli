@@ -13,7 +13,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/example/splitwise-cli/internal/config"
+	"github.com/paulakimenko/splitwise-cli/internal/config"
 )
 
 const (
